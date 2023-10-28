@@ -1,0 +1,54 @@
+#include<iostream>
+#include<algorithm>
+#include <opencv2/opencv.hpp>
+#include<opencv2/highgui/highgui.hpp>
+
+using namespace std;
+using namespace cv;
+
+#define WINDOW_NAME_1 "初始图"
+#define WINDOW_NAME_2 "结果图"
+
+double guss3[4][4]={
+    0.05,0.1,0.05,
+    0.1,0.4,0.1,
+    0.05,0.1,0.05
+
+}
+double guss5[6][6]={
+    1.0/56,1.0/56,2.0/56,1.0/56,1.0/56,
+     1.0/56,3.0/56,4.0/56,3.0/56,1.0/56,
+      2.0/56,4.0/56,8.0/56,4.0/56,2.0/56,
+       1.0/56,3.0/56,4.0/56,3.0/56,1.0/56,
+        1.0/56,1.0/56,2.0/56,1.0/56,1.0/56,
+}
+
+int main (){
+    Mat src,output;
+    Mat pry[100];
+    //src=imread("C:\\Users\\86187\\Desktop\\rm\\lesson2\\车牌3.png",1);
+    src=imread("/mnt/c/Users/86187/Desktop/rm/lesson2/test.png",1);
+    //src=Mat(400,400,CV_8UC3,Scalar(150,150,150));
+    output=Mat(src.rows,src.cols,CV_8UC3);
+    namedWindow(WINDOW_NAME_1,WINDOW_NORMAL);
+    namedWindow(WINDOW_NAME_2,WINDOW_NORMAL);
+    imshow(WINDOW_NAME_1,src);
+    for(int i=0;i<src.rows;i++){
+        for(int j=0;j<src.cols;j++){
+            double b=src.at<Vec3b>(i,j)[0]/255.0;
+            double g=src.at<Vec3b>(i,j)[1]/255.0;
+            double r=src.at<Vec3b>(i,j)[2]/255.0; // 注意先要进行类型转换！！
+                                                    //否则先计算出取整然后转double型
+            double h=geth(b,g,r);
+            double s=getss(b,g,r);
+            double v=getv(b,g,r);
+            output.at<Vec3b>(i,j)[0]=(uchar)(h/2);
+            output.at<Vec3b>(i,j)[1]=(uchar)(s*255);
+            output.at<Vec3b>(i,j)[2]=(uchar)(v*255);
+        }
+    }
+    imshow(WINDOW_NAME_2,output);
+    waitKey(0);
+    return 0;
+
+}
